@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Fotter from "../components/Fotter";
+import axios from "axios";
 
 const Contact = () => {
   const [name, setname] = useState("");
   const [message, setmessage] = useState("");
   const [email, setemail] = useState("")
 
-  const submit=()=>{
+  const submit=async(e)=>{
+    e.preventDefault();
     if(name=="" || message=="" || email==""){
       alert("fill all details please")
     }
     else{
-      alert("submitted")
+      const response=await axios.post("http://localhost:8000/contact_us/add",{
+        name:name,messages:message,email:email
+      })
+      console.log(response);
+      alert("submitted");
+
     }
   }
   return (
@@ -65,11 +72,10 @@ const Contact = () => {
 
           <div class="inputField btn">
             <button
-              type="submit"
+             
               id="form-submit"
               class="main-gradient-button"
-              
-              onClick={submit}
+              onClick={(e)=>{submit(e)}}
             >
               Send a message
             </button>

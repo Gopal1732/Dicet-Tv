@@ -1,14 +1,53 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import Header from "../components/Header";
 import Fotter from "../components/Fotter";
+import axios from "axios";
 
 const Products = () => {
+   const [data, setdata] = useState([]);
+   useEffect(()=>{
+    const getroutes = async () => {
+      const response = await axios.get("http://localhost:8000/products");
+      console.log(response);
+      setdata(response.data);
+    }
+    getroutes();
+   },[]);
   return (
     <div>
       <Header />
       <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-        <div class="product-card">
-
+        {
+          data.map((product)=>{
+            return  <div class="product-card">
+            <div class="product-tumb">
+              <img src= {product.image} alt="" />
+            </div>
+            <div class="product-details">
+              <h4>
+                <a href="">{product.heading}</a>
+              </h4>
+              <span class="product-catagory">{product.subheading}</span>
+              <p>
+              {product.description}</p>
+              <div class="product-bottom-details">
+                <div class="product-price">
+                 ${product.price}
+                </div>
+                {/* <div class="product-links">
+                  <a href="">
+                    <i class="fa fa-heart"></i>
+                  </a>
+                  <a href="">
+                    <i class="fa fa-shopping-cart"></i>
+                  </a>
+                </div> */}
+              </div>
+            </div>
+          </div>
+          })
+        }
+        {/* <div class="product-card">
           <div class="product-tumb">
             <img src="https://tse2.mm.bing.net/th?id=OIP.pWrpOjWb5nQumUCqfGnNHQHaG7&pid=Api&P=0&h=180" alt="" />
           </div>
@@ -34,7 +73,7 @@ const Products = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> 
         <div class="product-card">
           <div class="badge">Most Popular</div>
           <div class="product-tumb">
@@ -90,7 +129,7 @@ const Products = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>   */}
       </div>
       <Fotter />
     </div>

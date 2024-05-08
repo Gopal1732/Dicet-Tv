@@ -1,9 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Fotter from "../components/Fotter";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
-  const [state,setState] = useState(false);
+  const [state, setState] = useState(false);
+  const [svdata, setsvdata] = useState([]);
+  const [pdata, setpdata] = useState([]);
+  const [rdata, setrdata] = useState([]);
+  useEffect(() => {
+    const serviceroutes = async () => {
+      const response = await axios.get("http://localhost:8000/services");
+      console.log(response);
+      setsvdata(response.data);
+    }
+    const planroutes = async () => {
+      const response = await axios.get("http://localhost:8000/plans");
+      console.log(response);
+      setpdata(response.data);
+    }
+    const reviewroutes = async () => {
+      const response = await axios.get("http://localhost:8000/review");
+      console.log(response);
+      setrdata(response.data);
+    }
+    serviceroutes();
+    planroutes();
+    reviewroutes();
+
+  }, []);
   return (
     <div class="container">
       <div class="section1">
@@ -14,7 +39,7 @@ const Home = () => {
           </div>
           <nav class="col-lg-6">
             <ul class={
-              `nav_link ${state ? "active":""}`
+              `nav_link ${state ? "active" : ""}`
             }>
               <li>
                 <a href="/home">home</a>
@@ -32,14 +57,14 @@ const Home = () => {
                 <a href="/contact">contact us</a>
               </li>
               <button id="btn1">
-                  <Link to="/login" className="linker">
+                <Link to="/login" className="linker">
                   Get Started
-                  </Link>
+                </Link>
               </button>
             </ul>
           </nav>
           <div class="col-lg-2 icon">
-          <i class="fa fa-bars responsive" onClick={()=>{
+            <i class="fa fa-bars responsive" onClick={() => {
               setState(!state);
             }}></i>
             <i class="fa fa-user-o"></i>
@@ -60,7 +85,7 @@ const Home = () => {
             <div class="head1">Your Favorite</div>
             <div class="head2">Shows And Movies</div>
             <p>
-            Pay attention to the story, the characters, and the film's overall setting. Think about how these elements come together to create a cohesive whole.
+              Pay attention to the story, the characters, and the film's overall setting. Think about how these elements come together to create a cohesive whole.
             </p>
 
             <div class="btn2">
@@ -75,29 +100,43 @@ const Home = () => {
         </div>
 
         <div class="col-lg-10 box">
-          <div class="box1">
+          {
+            svdata.map((service) => {
+              return <div class={service.id%2==0?"box2":"box1"}>
+                <img src={service.icon}  alt="not available" />
+                <h3>{service.title}</h3>
+                <p>
+                  {service.description}
+                </p>
+              </div>
+
+            })
+          }
+          {/* <div class="box1">
             <img src="./icon-2.png" alt="" srcset="" />
             <h3>Broadband</h3>
             <p>
-            Broadband is the wide-bandwidth data transmission that exploits signals at a wide spread of frequencies and is used in fast internet connections. 
+              Broadband is the wide-bandwidth data transmission that exploits signals at a wide spread of frequencies and is used in fast internet connections.
             </p>
           </div>
           <div class="box2">
             <img src="./icon-1.png" alt="" srcset="" />
             <h3>Satelite TV</h3>
             <p>
-            Satellite Tv is service that delivers television programming to viewers relaying from a communication satellite orbiting Earth directly to viewer's location.
+              Satellite Tv is service that delivers television programming to viewers relaying from a communication satellite orbiting Earth directly to viewer's location.
             </p>
           </div>
           <div class="box3">
             <img src="./icon-3.png" alt="" srcset="" />
             <h3>Mobility</h3>
             <p>
-            The experience of individual mobility was accessible to the general public through the velocipede. It gave a sense of freedom, and discover the surrounding area.
+              The experience of individual mobility was accessible to the general public through the velocipede. It gave a sense of freedom, and discover the surrounding area.
             </p>
-          </div>
+          </div>  */}
         </div>
       </div>
+
+
       <div class="section2" id="about">
         <div class="sec2-col1">
           <img src="./section2-img.png" alt="" srcset="" />
@@ -107,7 +146,7 @@ const Home = () => {
             <div class="head3">Live Sport and TV-shows for best</div>
             <div class="head3">friends</div>
             <p>
-            Live streaming allows sports organizations to reach a wider audience, including those who may not have been able to attend the event in person. This not only increases the number of viewers but also helps to build a more engaged and dedicated fan base.
+              Live streaming allows sports organizations to reach a wider audience, including those who may not have been able to attend the event in person. This not only increases the number of viewers but also helps to build a more engaged and dedicated fan base.
             </p>
             <div class="sec2-box">
               <div class="secbox1">4K Ultra HD Quality</div>
@@ -115,36 +154,40 @@ const Home = () => {
             </div>
             <div id="btn4">
               read more
-              
-              </div>
+
+            </div>
           </div>
         </div>
       </div>
+
 
       <div class="section3" id="product">
         <div class="sec3-content">
           <h4>Tariffs</h4>
           <h1>Choose your plan</h1>
           <p>
-          “Listen up, ladies and gentlemen, our fugitive has been on the run for ninety minutes. Average foot speed over uneven ground barring injuries is 4 miles-per-hour. That gives us a radius of six miles. What I want from each and every one of you is a hard-target search of every gas station, residence, warehouse, farmhouse, henhouse, outhouse and doghouse in that area. Checkpoints go up at fifteen miles. Your fugitive's name is Dr. Richard Kimble. Go get him.”
+            “Listen up, ladies and gentlemen, our fugitive has been on the run for ninety minutes. Average foot speed over uneven ground barring injuries is 4 miles-per-hour. That gives us a radius of six miles. What I want from each and every one of you is a hard-target search of every gas station, residence, warehouse, farmhouse, henhouse, outhouse and doghouse in that area. Checkpoints go up at fifteen miles. Your fugitive's name is Dr. Richard Kimble. Go get him.”
           </p>
         </div>
-        <div class="sec3-box">
-          <div class="sec3-boxes">
-            <div class="sec3-box-content">
-              <div class="sec3-one">Easy Surfing</div>
-              <div class="sec3-two" style={{ backgroundColor: "red" }}>
-                Internet
+        <div class="sec3-box">{
+          pdata.map((plan) => {
+            return <div class="sec3-boxes">
+              <div class="sec3-box-content">
+                <div class="sec3-one">{plan.title}</div>
+                <div class="sec3-two" style={{ backgroundColor: "red" }}>
+                  {plan.subheading}
+                </div>
+                <div class="sec3-three">
+                  <h2>${plan.price}</h2>
+                  <h5>{plan.duration}</h5>
+                  <p>{plan.description}</p>
+                </div>
+                <button id="btn5"><Link to="/product">See More</Link></button>
               </div>
-              <div class="sec3-three">
-                <h2>$6.99</h2>
-                <h5>Month</h5>
-                <p>The internet is a great way to get on the net</p>
-              </div>
-             <button id="btn5"><Link to="/product">See More</Link></button>
             </div>
-          </div>
-          <div class="sec3-boxes">
+          })
+        }
+          {/* <div class="sec3-boxes">
             <div class="sec3-box-content">
               <div class="sec3-one">Impression</div>
               <div class="sec3-two" style={{ backgroundColor: "red" }}>
@@ -171,9 +214,10 @@ const Home = () => {
               </div>
               <button id="btn5"><Link to="/product">See More</Link></button>
             </div>
-          </div>
+          </div>  */}
         </div>
       </div>
+
 
       <div class="section4" id="blog">
         <div class="head5">
@@ -197,25 +241,57 @@ const Home = () => {
         </div>
       </div>
 
-      <div class="section5">
+
+      {/* <div class="section5">
         <div class="col-lg-3 sec5-col1">
           <img src="./section5.jpg" alt="" srcset="" />
         </div>
         <div class="col-lg-7 sec5-col2">
           <div class="head6">What our clients say</div>
-          <div class="sec5-row2">
-            <div class="miller-group">
-              <img src="./section5.jpg" class="miller" alt="" srcset="" />
-              Miller
+          {
+            rdata.map(()=>{
+              return <div class="sec5-row2">
+              <div class="miller-group">
+                <img src="./section5.jpg" class="miller" alt="" />
+                Miller
+              </div>
+              <img src="./quote.png" class="quote" alt="" srcset="" />
             </div>
-
-            <img src="./quote.png" class="quote" alt="" srcset="" />
-          </div>
+            })
+          }
           <p>
-          Movies about customer feedback often explore the significance of customer opinions in various industries, shedding light on their impact on product development and business success. These films often highlight the power of constructive criticism and the role of customer satisfaction in shaping a company's trajectory. Through compelling narratives, they emphasize how listening to and acting upon customer feedback can lead to innovation, underlining the essential role that feedback plays in contemporary business practices.
-          </p>
+              Movies about customer feedback often explore the significance of customer opinions in various industries, shedding light on their impact on product development and business success. These films often highlight the power of constructive criticism and the role of customer satisfaction in shaping a company's trajectory. Through compelling narratives, they emphasize how listening to and acting upon customer feedback can lead to innovation, underlining the essential role that feedback plays in contemporary business practices.
+              </p>
         </div>
+      </div> */}
+
+<div className="section5">
+  <div className="col-lg-3 sec5-col1">
+    <img src="./section5.jpg" alt="" srcSet="" />
+  </div>
+  <div className="col-lg-7 sec5-col2">
+    <div className="head6">What our clients say</div>
+    {rdata.map((review, index) => (
+      <div className="sec5-row2" key={index}>
+        <div className="miller-group">
+          <img src="./section5.jpg" className="miller" alt="" />
+          {review.name}
+        </div>
+        <img src="./quote.png" className="quote" alt="" srcSet="" />
       </div>
+    ))}
+    {rdata.length > 0 && (
+      <div className="sec5-row2">
+        <p>
+          {rdata[0].description}
+        </p>
+      </div>
+    )}
+  </div>
+</div>
+
+
+
 
       <div class="section6" id="contact">
         <div class="col-lg-3 sec6-col1">
